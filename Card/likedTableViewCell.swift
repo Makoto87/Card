@@ -10,12 +10,13 @@ import UIKit
 
 class likedTableViewCell: UITableViewCell {
     
+    // 画像の紐付け
     @IBOutlet weak var nameImage: UIImageView!
-    
+    // 名前の紐付け
     @IBOutlet weak var name: UILabel!
-    
+    // 職種の紐付け
     @IBOutlet weak var work: UILabel!
-    
+    // 出身地の紐付け
     @IBOutlet weak var from: UILabel!
     
     

@@ -12,12 +12,9 @@ class SegueViewController: UIViewController {
 
     @IBOutlet weak var textView: UITextView!
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // いいねが1つもないときの画面遷移先
         textView.text = "まだいいね！は\nありません。"
         // Do any additional setup after loading the view.
     }
