@@ -73,13 +73,9 @@ class ViewController: UIViewController {
 
         if segue.identifier == "ToLikedList" {
             let vc = segue.destination as! LikedListTableViewController
-
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
         }
-        
-        
-        
     }
 
     // 完全に遷移が行われ、スクリーン上からViewControllerが表示されなくなったときに呼ばれる
@@ -143,7 +139,6 @@ class ViewController: UIViewController {
                     // 左へ飛ばす場合
                     // X座標を左に500とばす(-500)
                     self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x - 500, y :self.personList[self.selectedCardCount].center.y)
-
                 })
                 // ベースカードの角度と位置を戻す
                 resetCard()
@@ -153,9 +148,9 @@ class ViewController: UIViewController {
                 selectedCardCount += 1
 
                 if selectedCardCount >= personList.count {
-                    // 遷移処理
+                    // 遷移処理。いいねがあった場合となかった場合
                     if likedName.count > 0 {
-                    performSegue(withIdentifier: "ToLikedList", sender: self)
+                        performSegue(withIdentifier: "ToLikedList", sender: self)
                     } else {
                         performSegue(withIdentifier: "AllBad", sender: self)
                     }
@@ -166,20 +161,19 @@ class ViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, animations: {
                     // 右へ飛ばす場合
                     // X座標を右に500とばす(+500)
-                self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
-
+                    self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
                 })
                 // ベースカードの角度と位置を戻す
                 resetCard()
                 // likeImageを隠す
                 likeImage.isHidden = true
-                // プロフをいいねリストに追加
+                // プロフィール情報をいいねリストに追加
                 likedName.append(nameList[selectedCardCount])
                 // 次のカードへ
                 selectedCardCount += 1
                 
                 if selectedCardCount >= personList.count {
-                    // 遷移処理
+                    // 遷移処理。いいねがあった場合となかった場合
                     if likedName.count > 0 {
                     performSegue(withIdentifier: "ToLikedList", sender: self)
                     } else {
