@@ -316,6 +316,7 @@
                         <outlet property="person4" destination="zuF-6g-1Pp" id="D8N-UN-vXe"/>
                         <outlet property="person5" destination="Me7-7N-lAE" id="zLB-ia-IXM"/>
                         <segue destination="HJZ-Rr-xTd" kind="show" identifier="ToLikedList" id="e2h-Zu-Eti"/>
+                        <segue destination="aQY-KH-JOx" kind="show" identifier="AllBad" id="9wj-M0-7FR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -327,6 +328,49 @@
             </objects>
             <point key="canvasLocation" x="786.95652173913049" y="37.5"/>
         </scene>
+        <!--Segue View Controller-->
+        <scene sceneID="gJO-iG-ajP">
+            <objects>
+                <viewController id="aQY-KH-JOx" customClass="SegueViewController" customModule="Card" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="scr-BG-R7o">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="津田" translatesAutoresizingMaskIntoConstraints="NO" id="ksO-7C-ZGo">
+                                <rect key="frame" x="79" y="384" width="256" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="0Sh-GX-lho"/>
+                                    <constraint firstAttribute="width" constant="256" id="bWV-Qm-KSJ"/>
+                                </constraints>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nsh-CA-rm3">
+                                <rect key="frame" x="87" y="542" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Ewc-GV-ETO"/>
+                                    <constraint firstAttribute="height" constant="128" id="bwl-41-1zm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ksO-7C-ZGo" firstAttribute="centerY" secondItem="scr-BG-R7o" secondAttribute="centerY" id="ATY-DV-C9x"/>
+                            <constraint firstItem="ksO-7C-ZGo" firstAttribute="centerX" secondItem="scr-BG-R7o" secondAttribute="centerX" id="Y1G-Z5-WIV"/>
+                            <constraint firstItem="nsh-CA-rm3" firstAttribute="centerX" secondItem="scr-BG-R7o" secondAttribute="centerX" id="YSe-Bc-FgZ"/>
+                            <constraint firstItem="nsh-CA-rm3" firstAttribute="top" secondItem="ksO-7C-ZGo" secondAttribute="bottom" constant="30" id="kUA-fe-Q4g"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8SN-Qc-Oak"/>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="nsh-CA-rm3" id="Dje-OG-THw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eho-pz-GVd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1633.3333333333335" y="-642.1875"/>
+        </scene>
         <!--Liked List Table View Controller-->
         <scene sceneID="QKr-Fj-0XI">
             <objects>
@@ -336,7 +380,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Cell" id="BUs-M1-CNV">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="Cell" id="BUs-M1-CNV" customClass="likedTableViewCell" customModule="Card" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BUs-M1-CNV" id="8Cw-xl-Q1z">
@@ -381,6 +425,7 @@
         <image name="バツ" width="256" height="256"/>
         <image name="ハート" width="256" height="256"/>
         <image name="板垣退助" width="383" height="400"/>
+        <image name="津田" width="183" height="275"/>
         <image name="津田梅子" width="373" height="400"/>
     </resources>
 </document>
