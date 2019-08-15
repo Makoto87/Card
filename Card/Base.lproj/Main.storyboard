@@ -134,7 +134,7 @@
                                     <outletCollection property="gestureRecognizers" destination="F3q-hx-N0J" appends="YES" id="Xr9-JV-ZGh"/>
                                 </connections>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Njy-qQ-WMP">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Njy-qQ-WMP">
                                 <rect key="frame" x="132" y="373" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="N7g-IQ-rHr"/>
@@ -153,9 +153,11 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AdT-c5-q8I" secondAttribute="bottom" constant="40" id="RPo-lv-4Sj"/>
                             <constraint firstItem="bIG-jh-6Gs" firstAttribute="leading" secondItem="S17-b0-faK" secondAttribute="leading" id="WHd-rJ-Idg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="KiN-rk-NpW" secondAttribute="bottom" constant="40" id="WI5-S0-PgL"/>
+                            <constraint firstItem="Njy-qQ-WMP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ccb-5v-Yte"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="KiN-rk-NpW" secondAttribute="trailing" constant="40" id="dCB-IK-bc1"/>
                             <constraint firstItem="bIG-jh-6Gs" firstAttribute="bottom" secondItem="S17-b0-faK" secondAttribute="bottom" id="gVf-HV-RnQ"/>
                             <constraint firstItem="bIG-jh-6Gs" firstAttribute="top" secondItem="S17-b0-faK" secondAttribute="top" id="gwb-1j-jqa"/>
+                            <constraint firstItem="Njy-qQ-WMP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="oHX-lX-2dp"/>
                             <constraint firstItem="AdT-c5-q8I" firstAttribute="top" secondItem="S17-b0-faK" secondAttribute="bottom" constant="40" id="sI5-jm-D5l"/>
                             <constraint firstItem="S17-b0-faK" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wzS-nP-h5h"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="S17-b0-faK" secondAttribute="trailing" id="xOS-CN-svT"/>

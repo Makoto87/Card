@@ -37,7 +37,6 @@ class ViewController: UIViewController {
         ["image": "ジョン万次郎", "name": "ジョン万次郎", "work": "冒険家", "from": "アメリカ", "color": #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)]
     ]
     
-    
     // ベースカードの中心
     var centerOfCard: CGPoint!
     // ユーザーカードの配列
@@ -68,7 +67,6 @@ class ViewController: UIViewController {
     
     func userChange() {
         let number = selectedCardCount % 2
-        self.view.bringSubviewToFront(personList[number])
         if selectedCardCount >= userInfo.count {
             performSegue(withIdentifier: "ToLikedList", sender: self)
         } else {
@@ -91,11 +89,20 @@ class ViewController: UIViewController {
 
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
+
         // カウント初期化
         selectedCardCount = 0
         // リスト初期化
         likedName = []
         userChange()
+        person2.alpha = 1
+        person1.alpha = 1
+
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        let number = selectedCardCount % 2
+        self.view.sendSubviewToBack(personList[number])
     }
 
     // セグエによる遷移前に呼ばれる
@@ -106,15 +113,6 @@ class ViewController: UIViewController {
 
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
-        }
-    }
-    
-    func resetPersonList() {
-        // 5人の飛んで行ったビューを元の位置に戻す
-        for person in personList {
-            // 元に戻す処理
-            person.center = self.centerOfCard
-            person.transform = .identity
         }
     }
 
@@ -150,10 +148,54 @@ class ViewController: UIViewController {
             // goodを表示
             likeImage.image = #imageLiteral(resourceName: "いいね")
             likeImage.isHidden = false
+            if selectedCardCount >= userInfo.count - 1 {
+                // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+                image2.image = UIImage(named: userInfo[0]["image"] as! String )
+                labels2[0].text = userInfo[0]["name"] as? String
+                labels2[1].text = userInfo[0]["work"] as? String
+                labels2[2].text = userInfo[0]["from"] as? String
+                person2.backgroundColor = userInfo[0]["color"] as? UIColor
+            } else {
+                if number == 0 {
+                    image2.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String)
+                    labels2[0].text = userInfo[selectedCardCount + 1]["name"] as? String
+                    labels2[1].text = userInfo[selectedCardCount + 1]["work"] as? String
+                    labels2[2].text = userInfo[selectedCardCount + 1]["from"] as? String
+                    person2.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                } else {
+                    image1.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String )
+                    labels1[0].text = userInfo[selectedCardCount + 1]["name"] as? String
+                    labels1[1].text = userInfo[selectedCardCount + 1]["work"] as? String
+                    labels1[2].text = userInfo[selectedCardCount + 1]["from"] as? String
+                    person1.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                }
+            }
         } else if xfromCenter < 0 {
             // badを表示
             likeImage.image = #imageLiteral(resourceName: "よくないね")
             likeImage.isHidden = false
+            if selectedCardCount >= userInfo.count - 1 {
+                // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+                image2.image = UIImage(named: userInfo[0]["image"] as! String )
+                labels2[0].text = userInfo[0]["name"] as? String
+                labels2[1].text = userInfo[0]["work"] as? String
+                labels2[2].text = userInfo[0]["from"] as? String
+                person2.backgroundColor = userInfo[0]["color"] as? UIColor
+            } else {
+                if number == 0 {
+                    image2.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String)
+                    labels2[0].text = userInfo[selectedCardCount + 1]["name"] as? String
+                    labels2[1].text = userInfo[selectedCardCount + 1]["work"] as? String
+                    labels2[2].text = userInfo[selectedCardCount + 1]["from"] as? String
+                    person2.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                } else {
+                    image1.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String )
+                    labels1[0].text = userInfo[selectedCardCount + 1]["name"] as? String
+                    labels1[1].text = userInfo[selectedCardCount + 1]["work"] as? String
+                    labels1[2].text = userInfo[selectedCardCount + 1]["from"] as? String
+                    person1.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                }
+            }
         }
 
         // 元の位置に戻す処理
@@ -164,7 +206,7 @@ class ViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, animations: {
                     // 左へ飛ばす場合
                     // X座標を左に500とばす(-500)
-                    self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x - 500, y :self.personList[self.selectedCardCount].center.y)
+                    self.personList[number].center = CGPoint(x: self.personList[number].center.x - 500, y :self.personList[number].center.y)
 
                 })
                 // ベースカードの角度と位置を戻す
@@ -175,18 +217,19 @@ class ViewController: UIViewController {
                 
                 selectedCardCount += 1
                 userChange()
+                personList[number].center = self.centerOfCard
+                personList[number].transform = .identity
+                self.view.sendSubviewToBack(personList[number])
 
-                if selectedCardCount >= userInfo.count {
-                    // 遷移処理
-                    performSegue(withIdentifier: "ToLikedList", sender: self)
-                }
+
 
             } else if card.center.x > self.view.frame.width - 50 {
                 // 右に大きくスワイプしたときの処理
                 UIView.animate(withDuration: 0.5, animations: {
                     // 右へ飛ばす場合
                     // X座標を右に500とばす(+500)
-                self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
+
+                self.personList[number].center = CGPoint(x: self.personList[number].center.x + 500, y :self.personList[number].center.y)
 
                 })
                 // ベースカードの角度と位置を戻す
@@ -198,19 +241,19 @@ class ViewController: UIViewController {
                 // 次のカードへ
                 selectedCardCount += 1
                 userChange()
+                personList[number].center = self.centerOfCard
+                personList[number].transform = .identity
+                self.view.sendSubviewToBack(personList[number])
                 
-                if selectedCardCount >= userInfo.count {
-                    // 遷移処理
-                    performSegue(withIdentifier: "ToLikedList", sender: self)
-                }
+
 
             } else {
                 // アニメーションをつける
                 UIView.animate(withDuration: 0.5, animations: {
                     // ユーザーカードを元の位置に戻す
-                    self.personList[self.selectedCardCount].center = self.centerOfCard
+                    self.personList[number].center = self.centerOfCard
                     // ユーザーカードの角度を元の位置に戻す
-                    self.personList[self.selectedCardCount].transform = .identity
+                    self.personList[number].transform = .identity
                     // ベースカードの角度と位置を戻す
                     self.resetCard()
                     // likeImageを隠す
@@ -221,35 +264,87 @@ class ViewController: UIViewController {
     }
 
     // よくないねボタン
-    @IBAction func dislikeButtonTapped(_ sender: Any) {
-
+    @IBAction func dislikeButtonTapped(_ sender: UIButton) {
+        let number = self.selectedCardCount % 2
         UIView.animate(withDuration: 0.5, animations: {
-            let number = self.selectedCardCount % 2
+
             // ベースカードをリセット
             self.resetCard()
             // ユーザーカードを左にとばす
             self.personList[number].center = CGPoint(x:self.personList[number].center.x - 500, y:self.personList[number].center.y)
         })
-
+        self.view.sendSubviewToBack(personList[number])
+        // ボタンを選択できなくする(連打防止)
+        sender.isEnabled = false
         selectedCardCount += 1
-        userChange()
+        // 0.5秒後に次のカードを表示させる
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            self.userChange()
+            sender.isEnabled = true
+        })
+
+        if selectedCardCount >= userInfo.count {
+            // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+            person2.alpha = 0
+            person1.alpha = 0
+        } else {
+            if number == 0 {
+                image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
+                labels2[0].text = userInfo[selectedCardCount]["name"] as? String
+                labels2[1].text = userInfo[selectedCardCount]["work"] as? String
+                labels2[2].text = userInfo[selectedCardCount]["from"] as? String
+                person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+            } else {
+                image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
+                labels1[0].text = userInfo[selectedCardCount]["name"] as? String
+                labels1[1].text = userInfo[selectedCardCount]["work"] as? String
+                labels1[2].text = userInfo[selectedCardCount]["from"] as? String
+                person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+            }
+        }
 
     }
 
     // いいねボタン
-    @IBAction func likeButtonTaped(_ sender: Any) {
-
-        UIView.animate(withDuration: 0.5, animations: {
-            let number = self.selectedCardCount % 2
+    @IBAction func likeButtonTaped(_ sender: UIButton) {
+        let number = self.selectedCardCount % 2
+        UIView.animate(withDuration: 0.5, delay:0.5, animations: {
             self.resetCard()
             self.personList[number].center = CGPoint(x:self.personList[number].center.x + 500, y:self.personList[number].center.y)
         })
+
+        self.view.sendSubviewToBack(personList[number])
+
         // いいねリストに追加
         likedName.append(nameList[selectedCardCount])
+        // ボタンを選択できなくする(連打防止)
+        sender.isEnabled = false
         selectedCardCount += 1
-        userChange()
-        resetPersonList()
+        // 0.5秒後に次のカードを表示させる
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            self.userChange()
+            sender.isEnabled = true
+        })
 
+        if selectedCardCount >= userInfo.count {
+            // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+            person2.alpha = 0
+            person1.alpha = 0
+        } else {
+            if number == 0 {
+                image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
+                labels2[0].text = userInfo[selectedCardCount]["name"] as? String
+                labels2[1].text = userInfo[selectedCardCount]["work"] as? String
+                labels2[2].text = userInfo[selectedCardCount]["from"] as? String
+                person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+            } else {
+                image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
+                labels1[0].text = userInfo[selectedCardCount]["name"] as? String
+                labels1[1].text = userInfo[selectedCardCount]["work"] as? String
+                labels1[2].text = userInfo[selectedCardCount]["from"] as? String
+                person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+            }
+        }
     }
 }
 
