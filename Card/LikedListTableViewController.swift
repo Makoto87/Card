@@ -10,11 +10,13 @@ import UIKit
 
 class LikedListTableViewController: UITableViewController {
 
-    // いいね」された名前の一覧
-    var likedName: [String] = []
+    // いいね」された名前の一覧。遷移前の情報を入れる
+    var likedName: [[String: String]] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Xibを使うために必要なもの
+        self.tableView.register(UINib(nibName: "likedTableViewCell", bundle: nil), forCellReuseIdentifier: "Cell")
     }
 
     // MARK: - Table view data source
@@ -27,10 +29,13 @@ class LikedListTableViewController: UITableViewController {
 
     // 必須:セルの設定
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        // いいねされた名前を表示
-        cell.textLabel?.text = likedName[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! likedTableViewCell
+        // いいねされた人のプロフィールを表示
+        cell.nameImage?.image = UIImage(named: likedName[indexPath.row]["imageName"] ?? "")
+        cell.name?.text = likedName[indexPath.row]["name"]
+        cell.work?.text = likedName[indexPath.row]["work"]
+        cell.from?.text = likedName[indexPath.row]["from"]
+        
         return cell
     }
 

@@ -6,6 +6,10 @@
 //  Copyright © 2019 原田悠嗣. All rights reserved.
 //
 
+// Xibでセルを作成。いいねがひとつもないとき?
+// すべての情報を載せる。画像、職種、出身国
+// いいねした人がいないときも表示する
+
 import UIKit
 
 class ViewController: UIViewController {
@@ -28,13 +32,20 @@ class ViewController: UIViewController {
     // 選択されたカードの数
     var selectedCardCount: Int = 0
     // ユーザーリスト
-    let nameList: [String] = ["津田梅子","ジョージワシントン","ガリレオガリレイ","板垣退助","ジョン万次郎"]
-    // 「いいね」をされた名前の配列
-    var likedName: [String] = []
+    let nameList: [[String: String]] = [
+        ["imageName": "津田梅子", "name": "津田梅子", "work": "教師", "from": "千葉"],
+        ["imageName": "ガリレオガリレイ", "name": "ガリレオガリレイ", "work": "物理学者", "from": "イタリア"],
+        ["imageName": "ジョージワシントン", "name": "ジョージワシントン", "work": "大統領", "from": "アメリカ"],
+        ["imageName": "板垣退助", "name": "板垣退助", "work": "議員", "from": "高知"],
+        ["imageName": "ジョン万次郎", "name": "ジョン万次郎", "work": "冒険家", "from": "アメリカ"]
+    ]
+    // 「いいね」をされた人の配列
+    var likedName: [[String: String]] = []
 
 
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         // ベースカードの中心を代入
         centerOfCard = baseCard.center
     }
@@ -52,6 +63,7 @@ class ViewController: UIViewController {
 
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         // カウント初期化
         selectedCardCount = 0
         // リスト初期化
@@ -60,10 +72,9 @@ class ViewController: UIViewController {
 
     // セグエによる遷移前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
         if segue.identifier == "ToLikedList" {
             let vc = segue.destination as! LikedListTableViewController
-
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
         }
@@ -71,6 +82,7 @@ class ViewController: UIViewController {
 
     // 完全に遷移が行われ、スクリーン上からViewControllerが表示されなくなったときに呼ばれる
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         // ユーザーカードを元に戻す
         resetPersonList()
     }
@@ -130,7 +142,6 @@ class ViewController: UIViewController {
                     // 左へ飛ばす場合
                     // X座標を左に500とばす(-500)
                     self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x - 500, y :self.personList[self.selectedCardCount].center.y)
-
                 })
                 // ベースカードの角度と位置を戻す
                 resetCard()
@@ -140,8 +151,12 @@ class ViewController: UIViewController {
                 selectedCardCount += 1
 
                 if selectedCardCount >= personList.count {
-                    // 遷移処理
-                    performSegue(withIdentifier: "ToLikedList", sender: self)
+                    // 遷移処理。いいねがあった場合となかった場合
+                    if likedName.count > 0 {
+                        performSegue(withIdentifier: "ToLikedList", sender: self)
+                    } else {
+                        performSegue(withIdentifier: "AllBad", sender: self)
+                    }
                 }
 
             } else if card.center.x > self.view.frame.width - 50 {
@@ -149,14 +164,13 @@ class ViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, animations: {
                     // 右へ飛ばす場合
                     // X座標を右に500とばす(+500)
-                self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
-
+                    self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + 500, y :self.personList[self.selectedCardCount].center.y)
                 })
                 // ベースカードの角度と位置を戻す
                 resetCard()
                 // likeImageを隠す
                 likeImage.isHidden = true
-                // いいねリストに追加
+                // プロフィール情報をいいねリストに追加
                 likedName.append(nameList[selectedCardCount])
                 // 次のカードへ
                 selectedCardCount += 1
@@ -195,7 +209,11 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 画面遷移
         if selectedCardCount >= personList.count {
+            if likedName.count > 0 {
             performSegue(withIdentifier: "ToLikedList", sender: self)
+            } else {
+                performSegue(withIdentifier: "AllBad", sender: self)
+            }
         }
     }
 

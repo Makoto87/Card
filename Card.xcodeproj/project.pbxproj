@@ -13,6 +13,9 @@
 		DD8AFB7E22FE43A7005AFD25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD8AFB7D22FE43A7005AFD25 /* Assets.xcassets */; };
 		DD8AFB8122FE43A7005AFD25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD8AFB7F22FE43A7005AFD25 /* LaunchScreen.storyboard */; };
 		DD8AFB8922FE9262005AFD25 /* LikedListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8AFB8822FE9262005AFD25 /* LikedListTableViewController.swift */; };
+		E14565762303F83B00829A86 /* likedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14565742303F83B00829A86 /* likedTableViewCell.swift */; };
+		E14565772303F83B00829A86 /* likedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E14565752303F83B00829A86 /* likedTableViewCell.xib */; };
+		E14565792304253300829A86 /* SegueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14565782304253300829A86 /* SegueViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		DD8AFB8022FE43A7005AFD25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DD8AFB8222FE43A7005AFD25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD8AFB8822FE9262005AFD25 /* LikedListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedListTableViewController.swift; sourceTree = "<group>"; };
+		E14565742303F83B00829A86 /* likedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = likedTableViewCell.swift; sourceTree = "<group>"; };
+		E14565752303F83B00829A86 /* likedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = likedTableViewCell.xib; sourceTree = "<group>"; };
+		E14565782304253300829A86 /* SegueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +65,10 @@
 				DD8AFB7622FE43A6005AFD25 /* AppDelegate.swift */,
 				DD8AFB7822FE43A6005AFD25 /* ViewController.swift */,
 				DD8AFB7A22FE43A6005AFD25 /* Main.storyboard */,
+				E14565782304253300829A86 /* SegueViewController.swift */,
 				DD8AFB8822FE9262005AFD25 /* LikedListTableViewController.swift */,
+				E14565742303F83B00829A86 /* likedTableViewCell.swift */,
+				E14565752303F83B00829A86 /* likedTableViewCell.xib */,
 				DD8AFB7D22FE43A7005AFD25 /* Assets.xcassets */,
 				DD8AFB7F22FE43A7005AFD25 /* LaunchScreen.storyboard */,
 				DD8AFB8222FE43A7005AFD25 /* Info.plist */,
@@ -128,6 +137,7 @@
 				DD8AFB8122FE43A7005AFD25 /* LaunchScreen.storyboard in Resources */,
 				DD8AFB7E22FE43A7005AFD25 /* Assets.xcassets in Resources */,
 				DD8AFB7C22FE43A6005AFD25 /* Main.storyboard in Resources */,
+				E14565772303F83B00829A86 /* likedTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +151,8 @@
 				DD8AFB8922FE9262005AFD25 /* LikedListTableViewController.swift in Sources */,
 				DD8AFB7922FE43A6005AFD25 /* ViewController.swift in Sources */,
 				DD8AFB7722FE43A6005AFD25 /* AppDelegate.swift in Sources */,
+				E14565792304253300829A86 /* SegueViewController.swift in Sources */,
+				E14565762303F83B00829A86 /* likedTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
