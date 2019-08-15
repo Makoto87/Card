@@ -173,12 +173,8 @@ class ViewController: UIViewController {
                 selectedCardCount += 1
                 
                 if selectedCardCount >= personList.count {
-                    // 遷移処理。いいねがあった場合となかった場合
-                    if likedName.count > 0 {
+                    // 遷移処理
                     performSegue(withIdentifier: "ToLikedList", sender: self)
-                    } else {
-                        performSegue(withIdentifier: "AllBad", sender: self)
-                    }
                 }
 
             } else {
@@ -230,11 +226,7 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 画面遷移
         if selectedCardCount >= personList.count {
-            if likedName.count > 0 {
             performSegue(withIdentifier: "ToLikedList", sender: self)
-            } else {
-                performSegue(withIdentifier: "AllBad", sender: self)
-            }
         }
     }
 }
