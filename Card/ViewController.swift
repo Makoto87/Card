@@ -45,6 +45,7 @@ class ViewController: UIViewController {
 
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         // ベースカードの中心を代入
         centerOfCard = baseCard.center
     }
@@ -62,6 +63,7 @@ class ViewController: UIViewController {
 
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         // カウント初期化
         selectedCardCount = 0
         // リスト初期化
@@ -70,7 +72,7 @@ class ViewController: UIViewController {
 
     // セグエによる遷移前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
         if segue.identifier == "ToLikedList" {
             let vc = segue.destination as! LikedListTableViewController
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
@@ -80,6 +82,7 @@ class ViewController: UIViewController {
 
     // 完全に遷移が行われ、スクリーン上からViewControllerが表示されなくなったときに呼ばれる
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         // ユーザーカードを元に戻す
         resetPersonList()
     }
