@@ -6,8 +6,6 @@
 //  Copyright © 2019 原田悠嗣. All rights reserved.
 //
 
-// ユーザーカードの情報を5枚から2枚に変更
-// 動作は変わらないようにする。5人の情報を表示し、色も変える
 
 import UIKit
 
@@ -58,18 +56,21 @@ class ViewController: UIViewController {
     // ロード完了時に呼ばれる
     override func viewDidLoad() {
         super.viewDidLoad()
-        // personListにperson1から5を追加
+        // personListにperson1から2を追加
         personList.append(person1)
         personList.append(person2)
         // ユーザー情報をセットする
         userChange()
     }
-    
+
+    // ユーザーカードにユーザー情報を入れる。奇数か偶数で決める
     func userChange() {
         let number = selectedCardCount % 2
+        // ユーザー情報を入れる前に画面遷移があるか確かめる
         if selectedCardCount >= userInfo.count {
             performSegue(withIdentifier: "ToLikedList", sender: self)
         } else {
+            // 偶数のときにユーザー1に情報を入れる
             if number == 0 {
                 image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
                 labels1[0].text = userInfo[selectedCardCount]["name"] as? String
@@ -77,6 +78,7 @@ class ViewController: UIViewController {
                 labels1[2].text = userInfo[selectedCardCount]["from"] as? String
                 person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
             } else {
+                // 奇数のとき
                 image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
                 labels2[0].text = userInfo[selectedCardCount]["name"] as? String
                 labels2[1].text = userInfo[selectedCardCount]["work"] as? String
@@ -86,7 +88,6 @@ class ViewController: UIViewController {
         }
     }
     
-
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
 
@@ -94,12 +95,14 @@ class ViewController: UIViewController {
         selectedCardCount = 0
         // リスト初期化
         likedName = []
+        // ユーザー情報初期化
         userChange()
         person2.alpha = 1
         person1.alpha = 1
 
     }
 
+    // 画面遷移時に1枚目のカードを下に持ってくる
     override func viewDidDisappear(_ animated: Bool) {
         let number = selectedCardCount % 2
         self.view.sendSubviewToBack(personList[number])
@@ -126,7 +129,7 @@ class ViewController: UIViewController {
 
     // スワイプ処理
     @IBAction func swipeCard(_ sender: UIPanGestureRecognizer) {
-
+        // どちらのユーザーカードを扱うか判断
         let number = selectedCardCount % 2
         // ベースカード
         let card = sender.view!
@@ -148,8 +151,9 @@ class ViewController: UIViewController {
             // goodを表示
             likeImage.image = #imageLiteral(resourceName: "いいね")
             likeImage.isHidden = false
+            // 下のカードを次に表示するデータに変える。sekectedCardCountが1つ増える前なので、-1した
             if selectedCardCount >= userInfo.count - 1 {
-                // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+                // 画面遷移するまでの下のカードの表示
                 image2.image = UIImage(named: userInfo[0]["image"] as! String )
                 labels2[0].text = userInfo[0]["name"] as? String
                 labels2[1].text = userInfo[0]["work"] as? String
@@ -157,12 +161,14 @@ class ViewController: UIViewController {
                 person2.backgroundColor = userInfo[0]["color"] as? UIColor
             } else {
                 if number == 0 {
+                    // 1の情報をスワイプするときの下のカード
                     image2.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String)
                     labels2[0].text = userInfo[selectedCardCount + 1]["name"] as? String
                     labels2[1].text = userInfo[selectedCardCount + 1]["work"] as? String
                     labels2[2].text = userInfo[selectedCardCount + 1]["from"] as? String
                     person2.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
                 } else {
+                    // 2のカードをスワイプするときの下のカード
                     image1.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String )
                     labels1[0].text = userInfo[selectedCardCount + 1]["name"] as? String
                     labels1[1].text = userInfo[selectedCardCount + 1]["work"] as? String
@@ -175,7 +181,6 @@ class ViewController: UIViewController {
             likeImage.image = #imageLiteral(resourceName: "よくないね")
             likeImage.isHidden = false
             if selectedCardCount >= userInfo.count - 1 {
-                // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
                 image2.image = UIImage(named: userInfo[0]["image"] as! String )
                 labels2[0].text = userInfo[0]["name"] as? String
                 labels2[1].text = userInfo[0]["work"] as? String
@@ -214,9 +219,9 @@ class ViewController: UIViewController {
                 // likeImageを隠す
                 likeImage.isHidden = true
                 // 次のカードへ
-                
                 selectedCardCount += 1
                 userChange()
+                // ユーザーカードを戻すとともに下に移動させる
                 personList[number].center = self.centerOfCard
                 personList[number].transform = .identity
                 self.view.sendSubviewToBack(personList[number])
@@ -241,6 +246,7 @@ class ViewController: UIViewController {
                 // 次のカードへ
                 selectedCardCount += 1
                 userChange()
+                // ユーザーカードを戻すとともに下へ移動
                 personList[number].center = self.centerOfCard
                 personList[number].transform = .identity
                 self.view.sendSubviewToBack(personList[number])
@@ -273,9 +279,11 @@ class ViewController: UIViewController {
             // ユーザーカードを左にとばす
             self.personList[number].center = CGPoint(x:self.personList[number].center.x - 500, y:self.personList[number].center.y)
         })
+        // ユーザーカードを下へ移動
         self.view.sendSubviewToBack(personList[number])
         // ボタンを選択できなくする(連打防止)
         sender.isEnabled = false
+        // 次のカードへ
         selectedCardCount += 1
         // 0.5秒後に次のカードを表示させる
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -283,17 +291,20 @@ class ViewController: UIViewController {
             sender.isEnabled = true
         })
 
+        // 下のカードを次のユーザーカードの情報にする
         if selectedCardCount >= userInfo.count {
-            // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+            // 画面遷移するときに何も表示
             person2.alpha = 0
             person1.alpha = 0
         } else {
+            // ユーザー1を扱っているとき
             if number == 0 {
                 image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
                 labels2[0].text = userInfo[selectedCardCount]["name"] as? String
                 labels2[1].text = userInfo[selectedCardCount]["work"] as? String
                 labels2[2].text = userInfo[selectedCardCount]["from"] as? String
                 person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+            // ユーザー2を扱っているとき
             } else {
                 image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
                 labels1[0].text = userInfo[selectedCardCount]["name"] as? String
