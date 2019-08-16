@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     // ユーザーカード
     @IBOutlet weak var person1: UIView!
     @IBOutlet weak var person2: UIView!
-
     // ユーザーカード1の画像とラベル
     @IBOutlet weak var image1: UIImageView!
     @IBOutlet var labels1: [UILabel]!
@@ -46,58 +45,19 @@ class ViewController: UIViewController {
     // 「いいね」をされた名前の配列
     var likedName: [String] = []
 
-    
-
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
         // ベースカードの中心を代入
         centerOfCard = baseCard.center
     }
-
     // ロード完了時に呼ばれる
     override func viewDidLoad() {
         super.viewDidLoad()
-        // personListにperson1から2を追加
+        // personListにperson1・2を追加
         personList.append(person1)
         personList.append(person2)
-//        // ユーザー情報をセットする
-//        userChange()
     }
 
-    // person1の情報変換をまとめた
-    func changeNumber1(number1: Int){
-        image1.image = UIImage(named: userInfo[number1]["image"] as! String )
-        labels1[0].text = userInfo[number1]["name"] as? String
-        labels1[1].text = userInfo[number1]["work"] as? String
-        labels1[2].text = userInfo[number1]["from"] as? String
-        person1.backgroundColor = userInfo[number1]["color"] as? UIColor
-    }
-    // person2の情報変換をまとめた
-    func changeNumber2(number2: Int){
-        image2.image = UIImage(named: userInfo[number2]["image"] as! String )
-        labels2[0].text = userInfo[number2]["name"] as? String
-        labels2[1].text = userInfo[number2]["work"] as? String
-        labels2[2].text = userInfo[number2]["from"] as? String
-        person2.backgroundColor = userInfo[number2]["color"] as? UIColor
-    }
-
-    // ユーザーカードにユーザー情報を入れる。奇数か偶数で決める
-    func userChange() {
-        let number = selectedCardCount % 2
-        // ユーザー情報を入れる前に画面遷移があるか確かめる
-        if selectedCardCount >= userInfo.count {
-            performSegue(withIdentifier: "ToLikedList", sender: self)
-        } else {
-            // 偶数のときにユーザー1に情報を入れる
-            if number == 0 {
-                changeNumber1(number1: selectedCardCount)
-            } else {
-                // 奇数のとき
-                changeNumber2(number2: selectedCardCount)
-            }
-        }
-    }
-    
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
         // カウント初期化
@@ -128,12 +88,55 @@ class ViewController: UIViewController {
         }
     }
 
+    // person1のカード情報変換をまとめた
+    func changeNumber1(number1: Int){
+        image1.image = UIImage(named: userInfo[number1]["image"] as! String )
+        labels1[0].text = userInfo[number1]["name"] as? String
+        labels1[1].text = userInfo[number1]["work"] as? String
+        labels1[2].text = userInfo[number1]["from"] as? String
+        person1.backgroundColor = userInfo[number1]["color"] as? UIColor
+    }
+    // person2のカード情報変換をまとめた
+    func changeNumber2(number2: Int){
+        image2.image = UIImage(named: userInfo[number2]["image"] as! String )
+        labels2[0].text = userInfo[number2]["name"] as? String
+        labels2[1].text = userInfo[number2]["work"] as? String
+        labels2[2].text = userInfo[number2]["from"] as? String
+        person2.backgroundColor = userInfo[number2]["color"] as? UIColor
+    }
+
+    // ユーザーカードにユーザー情報を入れる。奇数か偶数で決める
+    func userChange() {
+        let number = selectedCardCount % 2
+        // ユーザー情報を入れる前に画面遷移があるか確かめる
+        if selectedCardCount >= userInfo.count {
+            performSegue(withIdentifier: "ToLikedList", sender: self)
+        } else {
+            // 偶数のときにユーザー1に情報を入れる
+            if number == 0 {
+                changeNumber1(number1: selectedCardCount)
+            } else {
+                // 奇数のとき
+                changeNumber2(number2: selectedCardCount)
+            }
+        }
+    }
+
     // ベースカードを元に戻す
     func resetCard() {
         // 位置を戻す
         baseCard.center = centerOfCard
         // 角度を戻す
         baseCard.transform = .identity
+    }
+
+    /// ユーザーカードを左右に飛ばす処理
+    func farCard(distance: CGFloat) {
+        let number = selectedCardCount % 2
+        // X座標をdistance分飛ばす
+        personList[number].center = CGPoint(x: personList[number].center.x + distance, y :personList[number].center.y)
+        // ベースカードをリセット
+        resetCard()
     }
 
     // スワイプ処理
@@ -162,11 +165,11 @@ class ViewController: UIViewController {
             likeImage.isHidden = false
             // 下のカードを次に表示するデータに変える。sekectedCardCountが1つ増える前なので、-1した
             if selectedCardCount >= userInfo.count - 1 {
-                // 画面遷移するまでの下のカードの表示
+                // 画面遷移するとき、下のカードの透明化
                 person2.alpha = 0
             } else {
                 if number == 0 {
-                    // 1の情報をスワイプするときの下のカード
+                    // ユーザー1の情報をスワイプするときの下のカード
                     changeNumber2(number2: selectedCardCount + 1)
                 } else {
                     // 2のカードをスワイプするときの下のカード
@@ -177,18 +180,20 @@ class ViewController: UIViewController {
             // badを表示
             likeImage.image = #imageLiteral(resourceName: "よくないね")
             likeImage.isHidden = false
+            // 下のカードを次に表示するデータに変える。sekectedCardCountが1つ増える前なので、-1した
             if selectedCardCount >= userInfo.count - 1 {
+                // 画面遷移するとき、下のカードの透明化
                 person2.alpha = 0
             } else {
                 if number == 0 {
+                    // ユーザー1の情報をスワイプするときの下のカード
                     changeNumber2(number2: selectedCardCount + 1)
                 } else {
+                    // 2のカードをスワイプするときの下のカード
                     changeNumber1(number1: selectedCardCount + 1)
                 }
             }
         }
-
-
         // 元の位置に戻す処理
         if sender.state == UIGestureRecognizer.State.ended {
 
@@ -197,31 +202,24 @@ class ViewController: UIViewController {
                 UIView.animate(withDuration: 0.5, animations: {
                     // 左へ飛ばす場合
                     // X座標を左に500とばす(-500)
-                    self.personList[number].center = CGPoint(x: self.personList[number].center.x - 500, y :self.personList[number].center.y)
-
+                    self.farCard(distance: -500)
                 })
-                // ベースカードの角度と位置を戻す
-                resetCard()
                 // likeImageを隠す
                 likeImage.isHidden = true
-                // 次のカードへ
+                // カード数のカウントを増やす
                 selectedCardCount += 1
+                // 次のカードの情報を入れる
                 userChange()
                 // ユーザーカードを戻すとともに下に移動させる
                 personList[number].center = self.centerOfCard
                 personList[number].transform = .identity
                 self.view.sendSubviewToBack(personList[number])
-
-
-
             } else if card.center.x > self.view.frame.width - 50 {
                 // 右に大きくスワイプしたときの処理
                 UIView.animate(withDuration: 0.5, animations: {
                     // 右へ飛ばす場合
                     // X座標を右に500とばす(+500)
-
-                self.personList[number].center = CGPoint(x: self.personList[number].center.x + 500, y :self.personList[number].center.y)
-
+                self.farCard(distance: +500)
                 })
                 // ベースカードの角度と位置を戻す
                 resetCard()
@@ -229,17 +227,15 @@ class ViewController: UIViewController {
                 likeImage.isHidden = true
                 // いいねリストに追加
                 likedName.append(nameList[selectedCardCount])
-                // 次のカードへ
+                // カードのカウント数増やす
                 selectedCardCount += 1
+                // 次のカード情報を入れる
                 userChange()
                 // ユーザーカードを戻すとともに下へ移動
                 personList[number].center = self.centerOfCard
                 personList[number].transform = .identity
                 self.view.sendSubviewToBack(personList[number])
-                
-
-
-            } else {
+            } else {    // カード飛ばさないとき
                 // アニメーションをつける
                 UIView.animate(withDuration: 0.5, animations: {
                     // ユーザーカードを元の位置に戻す
@@ -257,13 +253,11 @@ class ViewController: UIViewController {
 
     // よくないねボタン
     @IBAction func dislikeButtonTapped(_ sender: UIButton) {
+        // 使うカードの選択
         let number = self.selectedCardCount % 2
+        // カードを飛ばす処理
         UIView.animate(withDuration: 0.5, animations: {
-
-            // ベースカードをリセット
-            self.resetCard()
-            // ユーザーカードを左にとばす
-            self.personList[number].center = CGPoint(x:self.personList[number].center.x - 500, y:self.personList[number].center.y)
+            self.farCard(distance: -500)
         })
         // ユーザーカードを下へ移動
         self.view.sendSubviewToBack(personList[number])
@@ -273,11 +267,12 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 0.5秒後に次のカードを表示させる
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-
+            // 次のカード情報を入れる
             self.userChange()
+            // ボタン使用可能にする
             sender.isEnabled = true
+            // ユーザーカードをもとに戻す
             self.personList[number].center = self.centerOfCard
-
         })
 
         // 下のカードを次のユーザーカードの情報にする
@@ -299,12 +294,13 @@ class ViewController: UIViewController {
 
     // いいねボタン
     @IBAction func likeButtonTaped(_ sender: UIButton) {
+        // 使うカードの選択
         let number = self.selectedCardCount % 2
+        // カードを飛ばす処理
         UIView.animate(withDuration: 0.5, animations: {
-            self.resetCard()
-            self.personList[number].center = CGPoint(x:self.personList[number].center.x + 500, y:self.personList[number].center.y)
+            self.farCard(distance: +500)
         })
-
+        // 飛ばしたユーザーカードを下に持ってくる
         self.view.sendSubviewToBack(personList[number])
 
         // いいねリストに追加
@@ -314,12 +310,14 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 0.5秒後に次のカードを表示させる
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+            // 次のユーザーカードを表示する処理
             self.userChange()
+            // ボタン使用可能にする
             sender.isEnabled = true
         })
-
+        // 下のカードを次のユーザーカードにする
         if selectedCardCount >= userInfo.count {
-            // 世に出してデータを増やすことを考えたら、さらにif文で分ける必要がある
+            // 画面遷移時に透明にする
             person2.alpha = 0
             person1.alpha = 0
         } else {
