@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     // ユーザーカード2の画像とラベル
     @IBOutlet weak var image2: UIImageView!
     @IBOutlet var labels2: [UILabel]!
-    
+
     // ユーザー情報の配列
     let userInfo: [[String: Any]] = [
         ["image": "津田梅子", "name": "津田梅子", "work": "教師", "from": "千葉", "color": #colorLiteral(red: 0.9994240403, green: 0.9855536819, blue: 0, alpha: 1)],
@@ -46,6 +46,7 @@ class ViewController: UIViewController {
     // 「いいね」をされた名前の配列
     var likedName: [String] = []
 
+    
 
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
@@ -59,8 +60,25 @@ class ViewController: UIViewController {
         // personListにperson1から2を追加
         personList.append(person1)
         personList.append(person2)
-        // ユーザー情報をセットする
-        userChange()
+//        // ユーザー情報をセットする
+//        userChange()
+    }
+
+    // person1の情報変換をまとめた
+    func changeNumber1(number1: Int){
+        image1.image = UIImage(named: userInfo[number1]["image"] as! String )
+        labels1[0].text = userInfo[number1]["name"] as? String
+        labels1[1].text = userInfo[number1]["work"] as? String
+        labels1[2].text = userInfo[number1]["from"] as? String
+        person1.backgroundColor = userInfo[number1]["color"] as? UIColor
+    }
+    // person2の情報変換をまとめた
+    func changeNumber2(number2: Int){
+        image2.image = UIImage(named: userInfo[number2]["image"] as! String )
+        labels2[0].text = userInfo[number2]["name"] as? String
+        labels2[1].text = userInfo[number2]["work"] as? String
+        labels2[2].text = userInfo[number2]["from"] as? String
+        person2.backgroundColor = userInfo[number2]["color"] as? UIColor
     }
 
     // ユーザーカードにユーザー情報を入れる。奇数か偶数で決める
@@ -72,34 +90,25 @@ class ViewController: UIViewController {
         } else {
             // 偶数のときにユーザー1に情報を入れる
             if number == 0 {
-                image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
-                labels1[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels1[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels1[2].text = userInfo[selectedCardCount]["from"] as? String
-                person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber1(number1: selectedCardCount)
             } else {
                 // 奇数のとき
-                image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
-                labels2[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels2[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels2[2].text = userInfo[selectedCardCount]["from"] as? String
-                person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber2(number2: selectedCardCount)
             }
         }
     }
     
     // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
     override func viewWillAppear(_ animated: Bool) {
-
         // カウント初期化
         selectedCardCount = 0
         // リスト初期化
         likedName = []
         // ユーザー情報初期化
         userChange()
-        person2.alpha = 1
+        // 透明化キャンセル
         person1.alpha = 1
-
+        person2.alpha = 1
     }
 
     // 画面遷移時に1枚目のカードを下に持ってくる
@@ -154,26 +163,14 @@ class ViewController: UIViewController {
             // 下のカードを次に表示するデータに変える。sekectedCardCountが1つ増える前なので、-1した
             if selectedCardCount >= userInfo.count - 1 {
                 // 画面遷移するまでの下のカードの表示
-                image2.image = UIImage(named: userInfo[0]["image"] as! String )
-                labels2[0].text = userInfo[0]["name"] as? String
-                labels2[1].text = userInfo[0]["work"] as? String
-                labels2[2].text = userInfo[0]["from"] as? String
-                person2.backgroundColor = userInfo[0]["color"] as? UIColor
+                person2.alpha = 0
             } else {
                 if number == 0 {
                     // 1の情報をスワイプするときの下のカード
-                    image2.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String)
-                    labels2[0].text = userInfo[selectedCardCount + 1]["name"] as? String
-                    labels2[1].text = userInfo[selectedCardCount + 1]["work"] as? String
-                    labels2[2].text = userInfo[selectedCardCount + 1]["from"] as? String
-                    person2.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                    changeNumber2(number2: selectedCardCount + 1)
                 } else {
                     // 2のカードをスワイプするときの下のカード
-                    image1.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String )
-                    labels1[0].text = userInfo[selectedCardCount + 1]["name"] as? String
-                    labels1[1].text = userInfo[selectedCardCount + 1]["work"] as? String
-                    labels1[2].text = userInfo[selectedCardCount + 1]["from"] as? String
-                    person1.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                    changeNumber1(number1: selectedCardCount + 1)
                 }
             }
         } else if xfromCenter < 0 {
@@ -181,27 +178,16 @@ class ViewController: UIViewController {
             likeImage.image = #imageLiteral(resourceName: "よくないね")
             likeImage.isHidden = false
             if selectedCardCount >= userInfo.count - 1 {
-                image2.image = UIImage(named: userInfo[0]["image"] as! String )
-                labels2[0].text = userInfo[0]["name"] as? String
-                labels2[1].text = userInfo[0]["work"] as? String
-                labels2[2].text = userInfo[0]["from"] as? String
-                person2.backgroundColor = userInfo[0]["color"] as? UIColor
+                person2.alpha = 0
             } else {
                 if number == 0 {
-                    image2.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String)
-                    labels2[0].text = userInfo[selectedCardCount + 1]["name"] as? String
-                    labels2[1].text = userInfo[selectedCardCount + 1]["work"] as? String
-                    labels2[2].text = userInfo[selectedCardCount + 1]["from"] as? String
-                    person2.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                    changeNumber2(number2: selectedCardCount + 1)
                 } else {
-                    image1.image = UIImage(named: userInfo[selectedCardCount + 1]["image"] as! String )
-                    labels1[0].text = userInfo[selectedCardCount + 1]["name"] as? String
-                    labels1[1].text = userInfo[selectedCardCount + 1]["work"] as? String
-                    labels1[2].text = userInfo[selectedCardCount + 1]["from"] as? String
-                    person1.backgroundColor = userInfo[selectedCardCount + 1]["color"] as? UIColor
+                    changeNumber1(number1: selectedCardCount + 1)
                 }
             }
         }
+
 
         // 元の位置に戻す処理
         if sender.state == UIGestureRecognizer.State.ended {
@@ -287,30 +273,25 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 0.5秒後に次のカードを表示させる
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+
             self.userChange()
             sender.isEnabled = true
+            self.personList[number].center = self.centerOfCard
+
         })
 
         // 下のカードを次のユーザーカードの情報にする
         if selectedCardCount >= userInfo.count {
             // 画面遷移するときに何も表示
-            person2.alpha = 0
             person1.alpha = 0
+            person2.alpha = 0
         } else {
             // ユーザー1を扱っているとき
             if number == 0 {
-                image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
-                labels2[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels2[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels2[2].text = userInfo[selectedCardCount]["from"] as? String
-                person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber2(number2: selectedCardCount)
             // ユーザー2を扱っているとき
             } else {
-                image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
-                labels1[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels1[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels1[2].text = userInfo[selectedCardCount]["from"] as? String
-                person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber1(number1: selectedCardCount)
             }
         }
 
@@ -319,7 +300,7 @@ class ViewController: UIViewController {
     // いいねボタン
     @IBAction func likeButtonTaped(_ sender: UIButton) {
         let number = self.selectedCardCount % 2
-        UIView.animate(withDuration: 0.5, delay:0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.resetCard()
             self.personList[number].center = CGPoint(x:self.personList[number].center.x + 500, y:self.personList[number].center.y)
         })
@@ -343,17 +324,9 @@ class ViewController: UIViewController {
             person1.alpha = 0
         } else {
             if number == 0 {
-                image2.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String)
-                labels2[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels2[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels2[2].text = userInfo[selectedCardCount]["from"] as? String
-                person2.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber2(number2: selectedCardCount)
             } else {
-                image1.image = UIImage(named: userInfo[selectedCardCount]["image"] as! String )
-                labels1[0].text = userInfo[selectedCardCount]["name"] as? String
-                labels1[1].text = userInfo[selectedCardCount]["work"] as? String
-                labels1[2].text = userInfo[selectedCardCount]["from"] as? String
-                person1.backgroundColor = userInfo[selectedCardCount]["color"] as? UIColor
+                changeNumber1(number1: selectedCardCount)
             }
         }
     }
